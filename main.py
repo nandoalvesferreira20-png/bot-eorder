@@ -2,7 +2,14 @@ from config.config import EORDER_URL, EXCEL_PATH
 from excel.leitor_excel import ler_notas_excel
 from browser.navegador import abrir_eorder
 from eorder.busca import abrir_busca_tdcs, pesquisar_tdc
-from eorder.cancelamento import abrir_menu_opcoes, clicar_cancelar_selecionados
+from eorder.cancelamento import (
+    abrir_menu_opcoes,
+    clicar_cancelar_selecionados,
+    confirmar_popup_sim,
+    confirmar_cancelamento,
+    fechar_popup_resultado,
+    fechar_tela_cancelamento,
+)
 
 
 def main():
@@ -32,6 +39,7 @@ def main():
         centro_operativo="481",
         codigo_externo=primeira_nota["codigo_externo"]
     )
+
     input("Confira se a pesquisa encontrou a TdC. Aperte ENTER para abrir o menu...")
 
     abrir_menu_opcoes(frame)
@@ -39,7 +47,24 @@ def main():
     input("Menu aberto. Aperte ENTER para clicar em Cancelar selecionados...")
 
     clicar_cancelar_selecionados(frame)
-    print("Sprint 2 finalizado: pesquisa executada.")
+
+    input("Popup 'Sim' aberto. Aperte ENTER para confirmar...")
+
+    confirmar_popup_sim(frame)
+
+    input("Tela de confirmação aberta. ENTER para confirmar cancelamento...")
+
+    confirmar_cancelamento(frame)
+
+    input("Popup de resultado aberto. ENTER para fechar...")
+
+    fechar_popup_resultado(frame)
+
+    input("Popup fechado. ENTER para fechar a tela de cancelamento...")
+
+    fechar_tela_cancelamento(frame)
+
+    print("Sprint 3 finalizado: cancelamento confirmado.")
 
     input("Pressione ENTER para fechar o navegador...")
 
