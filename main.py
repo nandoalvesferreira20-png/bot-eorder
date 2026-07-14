@@ -22,15 +22,15 @@ def main():
 
     frame.get_by_text("Menu Principal").wait_for(timeout=30000)
 
-    abrir_busca_tdcs(frame)
-
     for indice, nota in enumerate(notas, start=1):
-        centro_operativo = "481"  # temporário
+        centro_operativo = "481"
         codigo_externo = nota["codigo_externo"]
 
         print(f"\n[{indice}/{len(notas)}] Iniciando {codigo_externo}")
 
         try:
+            abrir_busca_tdcs(frame)
+
             processar_tdc(
                 frame,
                 centro_operativo=centro_operativo,
@@ -40,9 +40,13 @@ def main():
             print(f"[{indice}/{len(notas)}] OK - {codigo_externo}")
 
         except Exception as erro:
-            print(f"[{indice}/{len(notas)}] ERRO - {codigo_externo}")
+            print(f"\n🚨 BOT PAROU NA LINHA {indice}")
+            print(f"TdC com erro: {codigo_externo}")
             print(f"Motivo: {erro}")
-            continue
+
+        input("Resolva manualmente no eOrder e aperte ENTER para fechar o bot...")
+
+        break
 
     print("Sprint 4 finalizado: loop concluído.")
 

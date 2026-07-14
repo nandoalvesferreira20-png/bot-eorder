@@ -1,9 +1,16 @@
 from eorder.busca import pesquisar_tdc
+import time
 
 def abrir_menu_opcoes(frame):
-    menu_opcoes = frame.get_by_role("img", name="Opções")
-    menu_opcoes.wait_for(timeout=30000)
-    menu_opcoes.click()
+    menu_opcoes = frame.locator(
+        'div.badged img.icon_menu[alt="Opções"]'
+    ).last
+
+    menu_opcoes.wait_for(state="visible", timeout=30000)
+    menu_opcoes.click(force=True)
+
+    frame.get_by_text("Cancelar selecionados", exact=True).wait_for(timeout=30000)
+
     print("Menu de opções aberto.")
 
 
@@ -61,11 +68,15 @@ def processar_tdc(frame, centro_operativo: str, codigo_externo: str):
         codigo_externo=codigo_externo
     )
 
+    time.sleep(1.5)
+
     abrir_menu_opcoes(frame)
     clicar_cancelar_selecionados(frame)
     confirmar_popup_sim(frame)
     confirmar_cancelamento(frame)
     fechar_popup_resultado(frame)
     fechar_tela_cancelamento(frame)
+
+    time.sleep(1.5)
 
     print(f"TdC processada: {codigo_externo}")

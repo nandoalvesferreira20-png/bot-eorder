@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ambiente virtual
+venv/
+.venv/
+
+# Perfil do Chrome
+perfil_eorder/
+
+# Excel de testes
+planilhas/*.xlsx
+
+# Logs
+logs/
+
+# Vídeos
+*.mp4
+
+# VSCode
+.vscode/
+
+# Windows
+Thumbs.db

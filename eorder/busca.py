@@ -2,13 +2,31 @@ import re
 
 
 def abrir_busca_tdcs(frame):
-    frame.locator("div").filter(
-        has_text=re.compile(r"^Lista TdC$")
-    ).first.click()
-
-    frame.locator("div").filter(
+    busca_tdcs = frame.locator("div").filter(
         has_text=re.compile(r"^Busca TdCs$")
-    ).first.click()
+    ).first
+
+    # Se o submenu já estiver aberto, só clica em Busca TdCs
+    try:
+        if busca_tdcs.is_visible(timeout=3000):
+            busca_tdcs.click(force=True)
+            print("Tela Busca TdCs aberta.")
+            return
+    except:
+        pass
+
+    # Se não estiver aberto, expande Lista TdC
+    lista_tdc = frame.locator("div").filter(
+        has_text=re.compile(r"^Lista TdC$")
+    ).first
+
+    lista_tdc.wait_for(timeout=30000)
+    lista_tdc.click(force=True)
+
+    busca_tdcs.wait_for(timeout=30000)
+    busca_tdcs.click(force=True)
+
+    print("Tela Busca TdCs aberta.")
 
 
 def pesquisar_tdc(frame, centro_operativo: str, codigo_externo: str):
