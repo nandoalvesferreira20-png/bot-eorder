@@ -5,6 +5,27 @@ from eorder.busca import abrir_busca_tdcs
 from eorder.cancelamento import processar_tdc
 
 
+def reiniciar_fluxo(page):
+    print("\nReiniciando o fluxo do eOrder...")
+
+    page.reload(
+        wait_until="domcontentloaded",
+        timeout=60000
+    )
+
+    frame = page.frame_locator('iframe[name="mainFrame"]')
+
+    frame.get_by_text("Menu Principal").wait_for(
+        timeout=60000
+    )
+
+    abrir_busca_tdcs(frame)
+
+    print("Fluxo reiniciado com sucesso.")
+
+    return frame
+
+
 def main():
     notas = ler_notas_excel(EXCEL_PATH)
 
@@ -16,48 +37,110 @@ def main():
 
     playwright, browser, context, page = abrir_eorder(EORDER_URL)
 
-    input("Faça login no eOrder e aperte ENTER aqui no terminal para continuar...")
+    try:
+        input(
+            "Faça login no eOrder e aperte ENTER "
+            "aqui no terminal para continuar..."
+        )
 
-    frame = page.frame_locator('iframe[name="mainFrame"]')
+        frame = page.frame_locator('iframe[name="mainFrame"]')
 
-    frame.get_by_text("Menu Principal").wait_for(timeout=30000)
+        frame.get_by_text("Menu Principal").wait_for(
+            timeout=30000
+        )
 
-    for indice, nota in enumerate(notas, start=1):
-        centro_operativo = "481"
-        codigo_externo = nota["codigo_externo"]
+        for indice, nota in enumerate(notas, start=1):
+            centro_operativo = nota["centro_operativo"]
+            codigo_externo = nota["codigo_externo"]
 
-        print(f"\n[{indice}/{len(notas)}] Iniciando {codigo_externo}")
-
-        try:
-            abrir_busca_tdcs(frame)
-
-            processar_tdc(
-                frame,
-                centro_operativo=centro_operativo,
-                codigo_externo=codigo_externo
+            print(
+                f"\n[{indice}/{len(notas)}] "
+                f"Iniciando {codigo_externo}"
             )
 
-            print(f"[{indice}/{len(notas)}] OK - {codigo_externo}")
+            tentativa = 1
+            max_tentativas = 2
 
-        except Exception as erro:
-            print(f"\n🚨 BOT PAROU NA LINHA {indice}")
-            print(f"TdC com erro: {codigo_externo}")
-            print(f"Motivo: {erro}")
+            while tentativa <= max_tentativas:
+                try:
+                    abrir_busca_tdcs(frame)
 
-        input("Resolva manualmente no eOrder e aperte ENTER para fechar o bot...")
+                    resultado = processar_tdc(
+                        frame,
+                        centro_operativo=centro_operativo,
+                        codigo_externo=codigo_externo
+                    )
 
-        break
+                    if resultado == "JA_ANULADA":
+                        print(
+                            f"[{indice}/{len(notas)}] PULADA - "
+                            f"{codigo_externo} já estava anulada"
+                        )
 
-    print("Sprint 4 finalizado: loop concluído.")
+                    elif resultado == "WO_FINALIZADA":
+                        print(
+                            f"[{indice}/{len(notas)}] PULADA - "
+                            f"{codigo_externo} possui WO finalizada"
+                        )
 
-    input("Pressione ENTER para fechar o navegador...")
+                    else:
+                        print(
+                            f"[{indice}/{len(notas)}] OK - "
+                            f"{codigo_externo}"
+                        )
 
-    context.close()
+                    break
 
-    if browser:
-        browser.close()
+                except Exception as erro:
+                    mensagem_erro = str(erro)
 
-    playwright.stop()
+                    print(
+                        f"\nErro na tentativa "
+                        f"{tentativa}/{max_tentativas}"
+                    )
+                    print(f"TdC: {codigo_externo}")
+                    print(f"Motivo: {erro}")
+
+                    erro_filtros = (
+                        'name="filtros"' in mensagem_erro
+                        or "Não foi possível abrir os filtros" in mensagem_erro
+                    )
+
+                    if erro_filtros and tentativa < max_tentativas:
+                        print(
+                            "Erro ao abrir filtros. "
+                            "O bot reiniciará o fluxo e tentará "
+                            "a mesma TdC novamente."
+                        )
+
+                        frame = reiniciar_fluxo(page)
+                        tentativa += 1
+                        continue
+
+                    print(
+                        "\nNão foi possível recuperar automaticamente."
+                    )
+
+                    input(
+                        "Ajuste o eOrder manualmente para Busca TdCs "
+                        "e aperte ENTER para seguir para a próxima nota..."
+                    )
+
+                    break
+
+        print("\nProcessamento da planilha concluído.")
+
+        input(
+            "Pressione ENTER para fechar o navegador..."
+        )
+
+    finally:
+        context.close()
+
+        if browser:
+            browser.close()
+
+        playwright.stop()
 
 
 if __name__ == "__main__":

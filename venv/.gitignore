@@ -1,26 +1,50 @@
+# ==========================
 # Python
+# ==========================
 __pycache__/
 *.py[cod]
-*.pyo
+*$py.class
 
 # Ambiente virtual
 venv/
 .venv/
+env/
 
-# Perfil do Chrome
+# ==========================
+# Playwright / Chrome
+# ==========================
 perfil_eorder/
+playwright/.auth/
 
-# Excel de testes
-planilhas/*.xlsx
-
+# ==========================
 # Logs
+# ==========================
 logs/
+*.log
 
+# ==========================
 # Vídeos
+# ==========================
 *.mp4
 
+# ==========================
+# Excel de testes
+# ==========================
+planilhas/*.xlsx
+!planilhas/.gitkeep
+
+# ==========================
 # VSCode
+# ==========================
 .vscode/
 
+# ==========================
 # Windows
+# ==========================
 Thumbs.db
+Desktop.ini
+
+# ==========================
+# Variáveis de ambiente
+# ==========================
+.env
