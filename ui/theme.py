@@ -1,0 +1,16 @@
+CORES = {
+    "roxo": "#6F2DBD",
+    "roxo_hover": "#5A229B",
+    "azul": "#0078D4",
+    "azul_hover": "#0062AD",
+    "verde": "#2ECC71",
+    "amarelo": "#F4B400",
+    "vermelho": "#E53935",
+    "fundo": "#12131A",
+    "sidebar": "#1B1D27",
+    "card": "#20232E",
+    "card_hover": "#272B38",
+    "texto": "#F8F9FA",
+    "texto_secundario": "#A9B0BE",
+    "borda": "#343846",
+}
