@@ -8,10 +8,18 @@ Automação desktop desenvolvida em Python para processamento em lote de cancela
 ![Status](https://img.shields.io/badge/Version-1.0.0-success)
 
 ---
-# Interface
+## Interface
+
+## Dashboard
 ![Dashboard](README/Dashboard.png)
+
+## Splash Screen
 ![Splash](README/Splash.png)
+
+## Sobre
 ![Sobre](README/Sobre.png)
+
+## Relatórios
 ![Relatório](README/Relatorios.png)
 
 # 📌 Sobre
