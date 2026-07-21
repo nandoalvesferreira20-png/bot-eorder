@@ -3,17 +3,32 @@ import customtkinter as ctk
 from ui.home import HomePage
 from ui.relatorios import RelatoriosPage
 from ui.sobre import SobrePage
+from ui.splash import SplashScreen
 from ui.theme import CORES
+from version import APP_NAME, VERSION
+from PIL import Image
+from utils.resources import resource_path
 
-
+logo = ctk.CTkImage(
+    light_image=Image.open(resource_path("assets/bot_eorder.png")),
+    dark_image=Image.open(resource_path("assets/bot_eorder.png")),
+    size=(58, 58)
+)
 class BotEorderApp(ctk.CTk):
     def __init__(self):
         super().__init__()
 
+        # Esconde a janela principal enquanto a splash aparece
+        self.withdraw()
+
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
 
-        self.title("Bot eOrder")
+        self.title(f"{APP_NAME} v{VERSION}")
+        try:
+            self.iconbitmap("assets/bot_eorder.ico")
+        except Exception:
+            pass
         self.geometry("1240x760")
         self.minsize(1100, 680)
 
@@ -27,6 +42,12 @@ class BotEorderApp(ctk.CTk):
         self.criar_sidebar()
         self.criar_area_principal()
         self.exibir_pagina("status")
+
+        # Abre a splash após carregar a interface
+        self.splash = SplashScreen(
+            self,
+            duracao_ms=1800
+        )
 
     def criar_sidebar(self):
         self.sidebar = ctk.CTkFrame(
@@ -54,19 +75,10 @@ class BotEorderApp(ctk.CTk):
 
         icone = ctk.CTkLabel(
             logo_frame,
-            text="⚡",
-            width=46,
-            height=46,
-            corner_radius=12,
-            fg_color=CORES["roxo"],
-            text_color=CORES["texto"],
-            font=ctk.CTkFont(
-                size=24,
-                weight="bold"
+            image=logo,
+            text=""
             )
-        )
         icone.pack(side="left")
-
         texto_logo = ctk.CTkFrame(
             logo_frame,
             fg_color="transparent"
@@ -75,6 +87,8 @@ class BotEorderApp(ctk.CTk):
             side="left",
             padx=(12, 0)
         )
+
+    
 
         titulo = ctk.CTkLabel(
             texto_logo,
@@ -155,7 +169,7 @@ class BotEorderApp(ctk.CTk):
 
         versao = ctk.CTkLabel(
             rodape,
-            text="Versão 1.0.0",
+            text=f"Versão {VERSION}",
             text_color=CORES["texto_secundario"],
             font=ctk.CTkFont(size=11)
         )
@@ -219,7 +233,9 @@ class BotEorderApp(ctk.CTk):
             "relatorios": RelatoriosPage(
                 self.container
             ),
-            "sobre": SobrePage(self.container)
+            "sobre": SobrePage(
+                self.container
+            )
         }
 
         for pagina in self.paginas.values():
@@ -256,3 +272,8 @@ class BotEorderApp(ctk.CTk):
                     fg_color="transparent",
                     hover_color=CORES["card_hover"]
                 )
+
+
+if __name__ == "__main__":
+    app = BotEorderApp()
+    app.mainloop()

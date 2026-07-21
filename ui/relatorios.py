@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 from tkinter import messagebox
+from ui.components.header import PageHeader
+from ui.theme import CORES
 
 import customtkinter as ctk
 
@@ -9,7 +11,7 @@ class RelatoriosPage(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(
             master,
-            fg_color="transparent"
+            fg_color=CORES["fundo"]
         )
 
         self.pasta_relatorios = Path("relatorios")
@@ -22,11 +24,13 @@ class RelatoriosPage(ctk.CTkFrame):
         self.atualizar_lista()
 
     def criar_header(self):
-        header = ctk.CTkFrame(
+        self.header = PageHeader(
             self,
-            fg_color="transparent"
+            titulo="📊 Relatórios",
+            subtitulo="Consulte os arquivos gerados nas execuções anteriores."
         )
-        header.grid(
+
+        self.header.grid(
             row=0,
             column=0,
             sticky="ew",
@@ -34,46 +38,15 @@ class RelatoriosPage(ctk.CTkFrame):
             pady=(25, 15)
         )
 
-        titulo = ctk.CTkLabel(
-            header,
-            text="Relatórios",
-            font=ctk.CTkFont(
-                size=28,
-                weight="bold"
-            )
-        )
-        titulo.pack(anchor="w")
-
-        subtitulo = ctk.CTkLabel(
-            header,
-            text=(
-                "Consulte os relatórios gerados "
-                "nas execuções anteriores."
-            ),
-            text_color="gray70",
-            font=ctk.CTkFont(size=14)
-        )
-        subtitulo.pack(
-            anchor="w",
-            pady=(4, 0)
-        )
-
-        botao_atualizar = ctk.CTkButton(
-            header,
-            text="Atualizar",
-            width=110,
-            command=self.atualizar_lista
-        )
-        botao_atualizar.pack(
-            side="right",
-            pady=(0, 5)
-        )
-
     def criar_lista_relatorios(self):
         self.card_lista = ctk.CTkScrollableFrame(
             self,
             corner_radius=14,
-            label_text="Arquivos disponíveis"
+            fg_color=CORES["card"],
+            border_width=1,
+            border_color=CORES["borda"],
+            label_text="Arquivos disponíveis",
+            label_text_color=CORES["texto"]
         )
         self.card_lista.grid(
             row=1,
@@ -133,7 +106,10 @@ class RelatoriosPage(ctk.CTkFrame):
     ):
         item = ctk.CTkFrame(
             self.card_lista,
-            corner_radius=12
+            corner_radius=12,
+            fg_color=CORES["card_hover"],
+            border_width=1,
+            border_color=CORES["borda"],
         )
         item.grid(
             row=linha,
@@ -192,6 +168,8 @@ class RelatoriosPage(ctk.CTkFrame):
             item,
             text="Abrir",
             width=90,
+            fg_color=CORES["azul"],
+            hover_color=CORES["azul_hover"],
             command=lambda caminho=arquivo: (
                 self.abrir_relatorio(caminho)
             )

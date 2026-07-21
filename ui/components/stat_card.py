@@ -20,7 +20,7 @@ class StatCard(ctk.CTkFrame):
             border_color=CORES["borda"]
         )
 
-        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
 
         faixa = ctk.CTkFrame(
             self,
@@ -40,13 +40,13 @@ class StatCard(ctk.CTkFrame):
         label_icone = ctk.CTkLabel(
             self,
             text=icone,
-            width=42,
-            height=42,
-            corner_radius=12,
+            width=52,
+            height=52,
+            corner_radius=14,
             fg_color=cor_destaque,
             text_color=CORES["texto"],
             font=ctk.CTkFont(
-                size=20,
+                size=22,
                 weight="bold"
             )
         )
@@ -54,8 +54,8 @@ class StatCard(ctk.CTkFrame):
             row=0,
             column=1,
             rowspan=2,
-            padx=(0, 12),
-            pady=18
+            padx=(0, 14),
+            pady=24
         )
 
         self.label_titulo = ctk.CTkLabel(
@@ -68,7 +68,7 @@ class StatCard(ctk.CTkFrame):
             row=0,
             column=2,
             sticky="sw",
-            pady=(18, 2)
+            pady=(24, 2)
         )
 
         self.label_valor = ctk.CTkLabel(
@@ -76,7 +76,7 @@ class StatCard(ctk.CTkFrame):
             text=valor_inicial,
             text_color=CORES["texto"],
             font=ctk.CTkFont(
-                size=28,
+                size=30,
                 weight="bold"
             )
         )
@@ -84,7 +84,7 @@ class StatCard(ctk.CTkFrame):
             row=1,
             column=2,
             sticky="nw",
-            pady=(0, 18)
+            pady=(0, 24)
         )
 
     def atualizar_valor(self, valor):

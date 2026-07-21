@@ -9,6 +9,7 @@ from config.config import EORDER_URL
 from core.executor import BotEorderExecutor
 from ui.components.header import PageHeader
 from ui.components.stat_card import StatCard
+from datetime import datetime
 from ui.theme import CORES
 
 
@@ -39,7 +40,7 @@ class HomePage(ctk.CTkFrame):
     def criar_header(self):
         self.header = PageHeader(
             self,
-            titulo="⚡ Bot eOrder",
+            titulo="Bot eOrder",
             subtitulo=(
                 "Automação Inteligente de "
                 "Cancelamento de TdCs"
@@ -91,7 +92,7 @@ class HomePage(ctk.CTkFrame):
 
         self.entry_planilha = ctk.CTkEntry(
             card,
-            placeholder_text="Selecione o arquivo Excel",
+            placeholder_text="Nenhuma planilha selecionada...",
             height=42
         )
         self.entry_planilha.grid(
@@ -105,7 +106,7 @@ class HomePage(ctk.CTkFrame):
         self.botao_selecionar = ctk.CTkButton(
             card,
             text="Selecionar",
-            width=120,
+            width=105,
             height=42,
             fg_color=CORES["azul"],
             hover_color=CORES["azul_hover"],
@@ -128,7 +129,7 @@ class HomePage(ctk.CTkFrame):
             column=0,
             sticky="ew",
             padx=30,
-            pady=(0, 15)
+            pady=(0, 10)
         )
 
         for coluna in range(4):
@@ -202,7 +203,7 @@ class HomePage(ctk.CTkFrame):
             column=0,
             sticky="nsew",
             padx=30,
-            pady=(0, 15)
+            pady=(0, 12)
         )
 
         card.grid_columnconfigure(0, weight=1)
@@ -256,6 +257,8 @@ class HomePage(ctk.CTkFrame):
 
         self.barra_progresso = ctk.CTkProgressBar(
             card,
+            height=12,
+            corner_radius=8,
             progress_color=CORES["roxo"],
             fg_color=CORES["borda"]
         )
@@ -340,7 +343,7 @@ class HomePage(ctk.CTkFrame):
 
         self.botao_relatorio = ctk.CTkButton(
             container,
-            text="Abrir relatório",
+            text="📂 Abrir relatório",
             height=44,
             width=150,
             state="disabled",
@@ -594,13 +597,14 @@ class HomePage(ctk.CTkFrame):
     # =========================================================
 
     def adicionar_log(self, mensagem: str):
+        horario = datetime.now().strftime("%H:%M:%S")
         self.textbox_logs.configure(
             state="normal"
         )
 
         self.textbox_logs.insert(
             "end",
-            f"{mensagem}\n"
+            f"[{horario}]{mensagem}\n"
         )
 
         self.textbox_logs.see("end")

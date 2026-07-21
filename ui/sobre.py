@@ -1,11 +1,27 @@
 import customtkinter as ctk
+from PIL import Image
+
+from ui.components.header import PageHeader
+from ui.theme import CORES
+from version import APP_NAME, VERSION, DESCRIPTION, AUTHOR
+from utils.resources import resource_path
 
 
 class SobrePage(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(
             master,
-            fg_color="transparent"
+            fg_color=CORES["fundo"]
+        )
+
+        self.logo = ctk.CTkImage(
+            light_image=Image.open(
+                resource_path("assets/bot_eorder.png")
+            ),
+            dark_image=Image.open(
+                resource_path("assets/bot_eorder.png")
+            ),
+            size=(110, 110)
         )
 
         self.grid_columnconfigure(0, weight=1)
@@ -15,11 +31,13 @@ class SobrePage(ctk.CTkFrame):
         self.criar_conteudo()
 
     def criar_header(self):
-        header = ctk.CTkFrame(
+        self.header = PageHeader(
             self,
-            fg_color="transparent"
+            titulo="ⓘ Sobre",
+            subtitulo=f"Informações sobre o {APP_NAME}."
         )
-        header.grid(
+
+        self.header.grid(
             row=0,
             column=0,
             sticky="ew",
@@ -27,31 +45,13 @@ class SobrePage(ctk.CTkFrame):
             pady=(25, 15)
         )
 
-        titulo = ctk.CTkLabel(
-            header,
-            text="Sobre",
-            font=ctk.CTkFont(
-                size=28,
-                weight="bold"
-            )
-        )
-        titulo.pack(anchor="w")
-
-        subtitulo = ctk.CTkLabel(
-            header,
-            text="Informações sobre o Bot eOrder.",
-            text_color="gray70",
-            font=ctk.CTkFont(size=14)
-        )
-        subtitulo.pack(
-            anchor="w",
-            pady=(4, 0)
-        )
-
     def criar_conteudo(self):
         card = ctk.CTkFrame(
             self,
-            corner_radius=14
+            corner_radius=16,
+            fg_color=CORES["card"],
+            border_width=1,
+            border_color=CORES["borda"]
         )
         card.grid(
             row=1,
@@ -61,26 +61,49 @@ class SobrePage(ctk.CTkFrame):
             pady=(0, 25)
         )
 
+        bloco_icone = ctk.CTkLabel(
+            card,
+            image=self.logo,
+            text=""
+        )
+        bloco_icone.pack(
+            pady=(40, 20)
+        )
+
         titulo = ctk.CTkLabel(
             card,
-            text="BOT EORDER",
+            text=APP_NAME,
+            text_color=CORES["texto"],
             font=ctk.CTkFont(
                 size=30,
                 weight="bold"
             )
         )
         titulo.pack(
-            pady=(45, 8)
+            pady=(0, 8)
         )
 
         versao = ctk.CTkLabel(
             card,
-            text="Versão 1.0.0",
-            text_color="gray70",
+            text=f"Versão {VERSION}",
+            text_color=CORES["texto_secundario"],
             font=ctk.CTkFont(size=14)
         )
         versao.pack(
-            pady=(0, 25)
+            pady=(0, 20)
+        )
+
+        subtitulo = ctk.CTkLabel(
+            card,
+            text=DESCRIPTION,
+            text_color=CORES["roxo"],
+            font=ctk.CTkFont(
+                size=15,
+                weight="bold"
+            )
+        )
+        subtitulo.pack(
+            pady=(0, 20)
         )
 
         descricao = ctk.CTkLabel(
@@ -93,6 +116,7 @@ class SobrePage(ctk.CTkFrame):
                 "registro de logs, screenshots de erro e "
                 "geração de relatórios em Excel."
             ),
+            text_color=CORES["texto"],
             justify="center",
             wraplength=650,
             font=ctk.CTkFont(size=15)
@@ -105,10 +129,11 @@ class SobrePage(ctk.CTkFrame):
         tecnologias = ctk.CTkLabel(
             card,
             text=(
-                "Tecnologias\n\n"
+                "Tecnologias utilizadas\n\n"
                 "Python • Playwright • OpenPyXL • "
                 "CustomTkinter • Git"
             ),
+            text_color=CORES["roxo"],
             justify="center",
             font=ctk.CTkFont(
                 size=15,
@@ -121,8 +146,8 @@ class SobrePage(ctk.CTkFrame):
 
         autoria = ctk.CTkLabel(
             card,
-            text="Desenvolvido por Fernando Alves",
-            text_color="gray70",
+            text=f"Desenvolvido por {AUTHOR}",
+            text_color=CORES["texto_secundario"],
             font=ctk.CTkFont(size=13)
         )
         autoria.pack(
