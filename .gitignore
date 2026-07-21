@@ -48,3 +48,9 @@ Desktop.ini
 # Variáveis de ambiente
 # ==========================
 .env
+
+# Relatórios gerados
+relatorios/
+
+# Screenshots de erro
+screenshots/
